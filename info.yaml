@@ -1,25 +1,25 @@
 # Tiny Tapeout project information
 project:
-  title:        ""      # Project title
-  author:       ""      # Your name
-  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  ""      # One line description of what your project does
+  title:        "MIDNA Bridge - dual thermo decoder + coincidence"
+  author:       "R"
+  discord:      ""
+  description:  "Decodes 2x 3-bit flash-ADC thermometer codes from two MIDNA AFE boards to binary, flags coincidence (both >= 2), heartbeat on uo[7]. Companion to MIDNA-CRYO AFE."
   language:     "Analog" # other examples include Verilog, Amaranth, VHDL, etc
-  clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
+  clock_hz:     10000000       # Clock frequency in Hz (or 0 if not applicable)
 
   # How many tiles your design occupies? A single tile is about 167x108 uM.
   tiles: "1x2"          # Valid values for analog projects: 1x2, 2x2
 
   # How many analog pins does your project use?
-  analog_pins: 2        # Valid values: 0 to 6
+  analog_pins: 6        # Valid values: 0 to 6
   uses_vapwr: false       # Set to true if your project uses second analog power supply (VAPWR) in addition to 1.8V (VDPWR)
 
   # Your top module name must start with "tt_um_". Make it unique by including your github username:
-  top_module:  "tt_um_example"
+  top_module:  "tt_um_midna_bridge"
 
   # List your project's source files here. Source files must be in ./src and you must list each source file separately, one per line:
-  source_files:        
-    - "project.v"
+  source_files:
+    - midna_bridge_top.v
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).

@@ -8,13 +8,24 @@ You can also include images in this folder and reference them in the markdown. E
 -->
 
 ## How it works
-
-Explain how your project works
+Popcount thermometer-to-binary decoders for two MIDNA AFE channels plus a
+coincidence flag (both codes >= 2 in the same qualified sample).
 
 ## How to test
-
-Explain how to use your project
+Drive ui[2:0]/ui[5:3] with thermometer codes, pulse ui[6]; read codes on
+uo[1:0]/uo[3:2], valids uo[4]/uo[5], coincidence uo[6], heartbeat uo[7].
 
 ## External hardware
+Two MIDNA AFE devkit boards (thermometer outputs) or any GPIO source.
 
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any
+| # | Input          | Output       | Bidirectional |
+|---|----------------|--------------|---------------|
+| 0 | thermo A QPL   | code A bit0  |               |
+| 1 | thermo A QPM   | code A bit1  |               |
+| 2 | thermo A QPH   | code B bit0  |               |
+| 3 | thermo B QPL   | code B bit1  |               |
+| 4 | thermo B QPM   | valid A      |               |
+| 5 | thermo B QPH   | valid B      |               |
+| 6 | conv_echo      | coincidence  |               |
+| 7 |                | heartbeat    |               |
+EOF
