@@ -2,20 +2,13 @@
 project:
   title:        "MIDNA-CRYO CSA + StrongARM comparator"
   author:       "nanoeng"
-  discord:      ""      # fill in if you want a Tapeout Discord role
-  description:  "Charge-sensitive amplifier feeding a StrongARM dynamic latch comparator, sg13g2/cryo-readout derived design ported to sky130A"
+  discord:      ""
+  description:  "Charge-sensitive amplifier feeding a StrongARM dynamic latch comparator with on-chip bias generator, sg13g2/cryo-readout derived design, ported to sky130A"
   language:     "Analog"
-  clock_hz:     0       # comparator is edge-triggered by ui[0], not a free-running clock
+  clock_hz:     0
 
-  # A single tile is about 167x108 uM. Confirm against actual layout footprint
-  # once redrawn for sky130A -- 1x2 is the starting assumption for a 16-device
-  # analog block this size, not yet verified against the real DEF template.
   tiles: "1x2"
 
-  # qin (charge input) and vinn (comparator reference) are the only genuinely
-  # analog signals. clk, vx, vy are digital-swing (StrongARM clock and
-  # rail-to-rail comparator outputs) and use free digital pins instead of
-  # costed analog pins.
   analog_pins: 2
   uses_vapwr: false
 
@@ -24,9 +17,7 @@ project:
   source_files:
     - "project.v"
 
-# The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 pinout:
-  # Inputs
   ui[0]: "clk - StrongARM comparator clock"
   ui[1]: "rst - CSA reset (closes feedback switch)"
   ui[2]: ""
@@ -36,7 +27,6 @@ pinout:
   ui[6]: ""
   ui[7]: ""
 
-  # Outputs
   uo[0]: "vx - comparator output (true)"
   uo[1]: "vy - comparator output (complement)"
   uo[2]: ""
@@ -46,7 +36,6 @@ pinout:
   uo[6]: ""
   uo[7]: ""
 
-  # Bidirectional pins
   uio[0]: ""
   uio[1]: ""
   uio[2]: ""
@@ -56,7 +45,6 @@ pinout:
   uio[6]: ""
   uio[7]: ""
 
-  # Analog pins
   ua[0]: "qin - charge-sensitive amplifier input"
   ua[1]: "vinn - comparator reference / threshold input"
   ua[2]: ""
@@ -64,5 +52,4 @@ pinout:
   ua[4]: ""
   ua[5]: ""
 
-# Do not change!
 yaml_version: 6

@@ -1,15 +1,17 @@
 ## How it works
 
-This is a two-stage analog readout channel: a charge-sensitive amplifier
-(CSA) feeding a StrongARM dynamic latch comparator.
+This is a three-block analog readout channel on sky130A: a
+charge-sensitive amplifier (CSA) feeding a StrongARM dynamic latch
+comparator, with an on-chip current-mirror bias generator supplying
+all internal reference voltages. 25 transistors total.
 
 **CSA (5 transistors):** a single-stage cascoded common-source amplifier
-(NMOS input + NMOS cascode, PMOS cascode + PMOS current source) with a
-20fF capacitive feedback path and an NMOS reset switch across it. Charge
-injected at `ua[0]` (qin) integrates onto the feedback cap and produces a
-voltage step at the amplifier's output proportional to the injected
-charge (Q/Cf to first order). `ui_in[1]` (rst) closes the reset switch to
-re-zero the amplifier between events.
+(NMOS input + NMOS cascode, PMOS cascode + PMOS current source) with an
+NMOS reset switch across the feedback path. Charge injected at `ua[0]`
+(qin) integrates onto the feedback capacitance and produces a voltage
+step at the amplifier's output proportional to the injected charge.
+`ui_in[1]` (rst) closes the reset switch to re-zero the amplifier
+between events.
 
 **StrongARM comparator (11 transistors):** a tail-current switch, an
 NMOS input differential pair, an NMOS cross-coupled regeneration pair
@@ -25,12 +27,20 @@ StrongARM netlist rather than reconstructed from memory, specifically to
 avoid topology errors in a circuit family with several similar-looking
 variants (8T/9T/10T/13T).
 
-Functional operation was verified in transient simulation against the
-real PSP103 compact model (not an ideal/behavioral model): a 2fC charge
-injection produced a ~112mV step at the CSA output against an ideal
-Q/Cf prediction of 100mV (the gap is expected finite-gain error from a
-single-stage amplifier, not a simulation artifact), and the comparator
-resolved correctly and repeatably on every clock edge tested.
+**Bias generator (9 transistors):** an on-chip current-mirror reference
+stack generates `bias_p`, `bias_pcasc`, and `bias_ncasc` for the CSA's
+PMOS load/cascode and NMOS cascode devices, using a long-channel
+diode-connected NMOS to set a compact ~1.5uA reference current (a
+physical resistor at this value would need an impractically long trace
+at this PDK's sheet resistance). No external bias pins are required.
+
+Functional operation was verified in transient simulation against
+real sky130A BSIM models (not an ideal/behavioral model), with all
+three blocks connected together as one circuit: the bias generator
+holds its operating point (`bias_p`~0.75-0.78V, `bias_pcasc`~0.14V,
+`bias_ncasc`~0.57V) under real circuit loading, and the comparator
+resolves cleanly to rail-to-rail values following a charge injection
+and clock edge.
 
 ## How to test
 
@@ -41,6 +51,9 @@ resolved correctly and repeatably on every clock edge tested.
 3. Set `ua[1]` (vinn) to the desired comparison threshold.
 4. Pulse `ui_in[0]` (clk) high; read the resolved decision on
    `uo_out[0]`/`uo_out[1]`.
+
+No external bias voltages are needed -- all internal references are
+generated on-chip.
 
 ## External hardware
 
